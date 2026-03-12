@@ -1,0 +1,23 @@
+[package]
+name = "horsenuggets/hashlib"
+description = "A hashing library for Luau."
+version = "0.0.1"
+license = "MIT"
+realm = "shared"
+registry = "https://github.com/UpliftGames/wally-index"
+repository = "https://github.com/horsenuggets/hashlib"
+include = [
+    "default.project.json",
+    "init.luau",
+    "LICENSE",
+    "README.md",
+    "Source",
+    "Source/**",
+    "wally.toml",
+]
+exclude = ["**"]
+
+[dependencies]
+
+[dev-dependencies]
+Testable = "horsenuggets/testable@0.1.0"
