@@ -23,12 +23,12 @@ export type HashLib = {
     sha256: HashFunction,
     sha384: HashFunction,
     sha512: HashFunction,
-    sha512_224: HashFunction,
-    sha512_256: HashFunction,
-    sha3_224: HashFunction,
-    sha3_256: HashFunction,
-    sha3_384: HashFunction,
-    sha3_512: HashFunction,
+    sha512x224: HashFunction,
+    sha512x256: HashFunction,
+    sha3x224: HashFunction,
+    sha3x256: HashFunction,
+    sha3x384: HashFunction,
+    sha3x512: HashFunction,
     shake128: (message: string, digestSizeInBytes: number) -> string,
     shake256: (message: string, digestSizeInBytes: number) -> string,
     hmac: (
@@ -37,11 +37,11 @@ export type HashLib = {
         message: string?,
         asBinary: boolean?
     ) -> string | (message: string?) -> string?,
-    hex_to_bin: (hex: string) -> string,
-    base64_to_bin: (base64: string) -> string,
-    bin_to_base64: (binary: string) -> string,
-    base64_encode: (input: string) -> string,
-    base64_decode: (input: string) -> string,
+    hexToBin: (hex: string) -> string,
+    base64ToBin: (base64: string) -> string,
+    binToBase64: (binary: string) -> string,
+    base64Encode: (input: string) -> string,
+    base64Decode: (input: string) -> string,
 }
 
 --------------------------------------------------------------------------------
@@ -1412,10 +1412,10 @@ local HashLib = {
     sha256 = function(message: string?): any
         return sha256ext(256, message)
     end,
-    sha512_224 = function(message: string?): any
+    sha512x224 = function(message: string?): any
         return sha512ext(224, message)
     end,
-    sha512_256 = function(message: string?): any
+    sha512x256 = function(message: string?): any
         return sha512ext(256, message)
     end,
     sha384 = function(message: string?): any
@@ -1424,16 +1424,16 @@ local HashLib = {
     sha512 = function(message: string?): any
         return sha512ext(512, message)
     end,
-    sha3_224 = function(message: string?): any
+    sha3x224 = function(message: string?): any
         return keccak((1600 - 2 * 224) / 8, 224 / 8, false, message)
     end,
-    sha3_256 = function(message: string?): any
+    sha3x256 = function(message: string?): any
         return keccak((1600 - 2 * 256) / 8, 256 / 8, false, message)
     end,
-    sha3_384 = function(message: string?): any
+    sha3x384 = function(message: string?): any
         return keccak((1600 - 2 * 384) / 8, 384 / 8, false, message)
     end,
-    sha3_512 = function(message: string?): any
+    sha3x512 = function(message: string?): any
         return keccak((1600 - 2 * 512) / 8, 512 / 8, false, message)
     end,
     shake128 = function(message: string, digest_size_in_bytes: number): any
@@ -1443,11 +1443,11 @@ local HashLib = {
         return keccak((1600 - 2 * 256) / 8, digest_size_in_bytes, true, message)
     end,
     hmac = hmac,
-    hex_to_bin = hex2bin,
-    base64_to_bin = base642bin,
-    bin_to_base64 = bin2base64,
-    base64_encode = Base64.encode,
-    base64_decode = Base64.decode,
+    hexToBin = hex2bin,
+    base64ToBin = base642bin,
+    binToBase64 = bin2base64,
+    base64Encode = Base64.encode,
+    base64Decode = Base64.decode,
 }
 
 block_size_for_HMAC = {
@@ -1455,14 +1455,14 @@ block_size_for_HMAC = {
     [HashLib.sha1] = 64,
     [HashLib.sha224] = 64,
     [HashLib.sha256] = 64,
-    [HashLib.sha512_224] = 128,
-    [HashLib.sha512_256] = 128,
+    [HashLib.sha512x224] = 128,
+    [HashLib.sha512x256] = 128,
     [HashLib.sha384] = 128,
     [HashLib.sha512] = 128,
-    [HashLib.sha3_224] = (1600 - 2 * 224) / 8,
-    [HashLib.sha3_256] = (1600 - 2 * 256) / 8,
-    [HashLib.sha3_384] = (1600 - 2 * 384) / 8,
-    [HashLib.sha3_512] = (1600 - 2 * 512) / 8,
+    [HashLib.sha3x224] = (1600 - 2 * 224) / 8,
+    [HashLib.sha3x256] = (1600 - 2 * 256) / 8,
+    [HashLib.sha3x384] = (1600 - 2 * 384) / 8,
+    [HashLib.sha3x512] = (1600 - 2 * 512) / 8,
 }
 
 return HashLib :: HashLib

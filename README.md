@@ -29,5 +29,5 @@ Add to your `wally.toml`:
 
 ```toml
 [dependencies]
-HashLib = "horsenuggets/hashlib@0.0.1"
+HashLib = "horsenuggets/hashlib@0.0.2"
 ```
