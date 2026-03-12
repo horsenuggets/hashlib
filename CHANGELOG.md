@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.0.2
+- Renamed all public API functions from snake_case to camelCase
+
 ## 0.0.1
 - Initial release based on boatbomber/hashlib with full Luau type annotations
 - Added MD5, SHA-1, SHA-224, SHA-256, SHA-384, SHA-512, SHA-512/224, SHA-512/256
