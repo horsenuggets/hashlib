@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  branch-naming:
+  branch-name:
     name: Validate branch name
     runs-on: ubuntu-latest
     steps:
