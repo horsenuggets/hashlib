@@ -1,6 +1,6 @@
 --[[
 
-HashLibTest
+HashLibTest.spec
 
 Tests for the HashLib module using known test vectors from NIST and RFC
 documents.
