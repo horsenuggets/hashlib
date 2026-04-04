@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.0.3
+- Standardized test runner with code coverage
+- Included .luaurc in Wally package
+- Bumped lune to 0.10.4-horse.13.0
+- Bumped luau-lsp to 1.63.0-horse.1.4
+- Added branch name validation to CI
+- Renamed public API to camelCase
+
 ## 0.0.2
 - Renamed all public API functions from snake_case to camelCase
 
