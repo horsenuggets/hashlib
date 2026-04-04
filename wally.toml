@@ -1,13 +1,12 @@
 [package]
 name = "horsenuggets/hashlib"
 description = "A hashing library for Luau."
-version = "0.0.3"
+version = "0.0.4"
 license = "MIT"
 realm = "shared"
 registry = "https://github.com/UpliftGames/wally-index"
 repository = "https://github.com/horsenuggets/hashlib"
 include = [
-    ".luaurc",
     "default.project.json",
     "init.luau",
     "LICENSE",
