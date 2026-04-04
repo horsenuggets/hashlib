@@ -21,4 +21,4 @@ exclude = ["**"]
 [dependencies]
 
 [dev-dependencies]
-Testable = "horsenuggets/testable@1.1.2"
+Testable = "horsenuggets/testable@1.1.3"
