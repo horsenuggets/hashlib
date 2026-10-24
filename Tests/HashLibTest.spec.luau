@@ -7,7 +7,7 @@ documents.
 
 --]]
 
-local HashLib = require("@hashlib")
+const HashLib = require("@hashlib")
 
 return function()
     describe("md5", function()
@@ -109,37 +109,37 @@ return function()
 
     describe("hmac", function()
         it("should compute HMAC-SHA256", function()
-            local result = HashLib.hmac(HashLib.sha256, "key", "The quick brown fox jumps over the lazy dog")
+            const result = HashLib.hmac(HashLib.sha256, "key", "The quick brown fox jumps over the lazy dog")
             expect(result).to.equal("f7bc83f430538424b13298e6aa6fb143ef4d59a14946175997479dbc2d1a3cd8")
         end)
 
         it("should compute HMAC-MD5", function()
-            local result = HashLib.hmac(HashLib.md5, "", "")
+            const result = HashLib.hmac(HashLib.md5, "", "")
             expect(result).to.equal("74e6f7298a9c2d168935f58c001bad88")
         end)
     end)
 
     describe("utility functions", function()
         it("should convert hex to binary", function()
-            local bin = HashLib.hexToBin("48656c6c6f")
+            const bin = HashLib.hexToBin("48656c6c6f")
             expect(bin).to.equal("Hello")
         end)
 
         it("should convert binary to base64", function()
-            local b64 = HashLib.binToBase64("Hello")
+            const b64 = HashLib.binToBase64("Hello")
             expect(b64).to.equal("SGVsbG8=")
         end)
 
         it("should convert base64 to binary", function()
-            local bin = HashLib.base64ToBin("SGVsbG8=")
+            const bin = HashLib.base64ToBin("SGVsbG8=")
             expect(bin).to.equal("Hello")
         end)
 
         it("should encode and decode base64", function()
-            local encoded = HashLib.base64Encode("Hello, World!")
+            const encoded = HashLib.base64Encode("Hello, World!")
             expect(encoded).to.equal("SGVsbG8sIFdvcmxkIQ==")
 
-            local decoded = HashLib.base64Decode(encoded)
+            const decoded = HashLib.base64Decode(encoded)
             expect(decoded).to.equal("Hello, World!")
         end)
     end)

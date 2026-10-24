@@ -8,7 +8,7 @@ and howmanysmall.
 
 --]]
 
-local Base64 = require("@self/Base64")
+const Base64 = require("@self/Base64")
 
 --------------------------------------------------------------------------------
 -- TYPE DEFINITIONS
@@ -48,30 +48,30 @@ export type HashLib = {
 -- LOCALIZATION FOR VM OPTIMIZATIONS
 --------------------------------------------------------------------------------
 
-local ipairs = ipairs
+const ipairs = ipairs
 
 --------------------------------------------------------------------------------
 -- 32-BIT BITWISE FUNCTIONS
 --------------------------------------------------------------------------------
 
-local bit32_band = bit32.band
-local bit32_bor = bit32.bor
-local bit32_bxor = bit32.bxor
-local bit32_lrotate = bit32.lrotate
-local bit32_lshift = bit32.lshift
-local bit32_rrotate = bit32.rrotate
-local bit32_rshift = bit32.rshift
+const bit32_band = bit32.band
+const bit32_bor = bit32.bor
+const bit32_bxor = bit32.bxor
+const bit32_lrotate = bit32.lrotate
+const bit32_lshift = bit32.lshift
+const bit32_rrotate = bit32.rrotate
+const bit32_rshift = bit32.rshift
 
 --------------------------------------------------------------------------------
 -- CREATING OPTIMIZED INNER LOOP
 --------------------------------------------------------------------------------
 
-local sha2_K_lo, sha2_K_hi, sha2_H_lo, sha2_H_hi, sha3_RC_lo, sha3_RC_hi = {}, {}, {}, {}, {}, {}
-local sha2_H_ext256 = {
+const sha2_K_lo, sha2_K_hi, sha2_H_lo, sha2_H_hi, sha3_RC_lo, sha3_RC_hi = {}, {}, {}, {}, {}, {}
+const sha2_H_ext256 = {
     [224] = {},
     [256] = sha2_H_hi,
 }
-local sha2_H_ext512_lo, sha2_H_ext512_hi =
+const sha2_H_ext512_lo, sha2_H_ext512_hi =
     {
         [384] = {},
         [512] = sha2_H_lo,
@@ -79,8 +79,8 @@ local sha2_H_ext512_lo, sha2_H_ext512_hi =
         [384] = {},
         [512] = sha2_H_hi,
     }
-local md5_K, md5_sha1_H = {}, { 0x67452301, 0xEFCDAB89, 0x98BADCFE, 0x10325476, 0xC3D2E1F0 }
-local md5_next_shift = {
+const md5_K, md5_sha1_H = {}, { 0x67452301, 0xEFCDAB89, 0x98BADCFE, 0x10325476, 0xC3D2E1F0 }
+const md5_next_shift = {
     0,
     0,
     0,
@@ -111,61 +111,61 @@ local md5_next_shift = {
     21,
 }
 local HEX64, XOR64A5, lanes_index_base
-local common_W = {}
-local K_lo_modulo, hi_factor, hi_factor_keccak = 4294967296, 0, 0
+const common_W = {}
+const K_lo_modulo, hi_factor, hi_factor_keccak = 4294967296, 0, 0
 
-local TWO_POW_NEG_56 = 2 ^ -56
-local TWO_POW_NEG_17 = 2 ^ -17
-local TWO_POW_2 = 2 ^ 2
-local TWO_POW_3 = 2 ^ 3
-local TWO_POW_4 = 2 ^ 4
-local TWO_POW_5 = 2 ^ 5
-local TWO_POW_6 = 2 ^ 6
-local TWO_POW_7 = 2 ^ 7
-local TWO_POW_8 = 2 ^ 8
-local TWO_POW_9 = 2 ^ 9
-local TWO_POW_10 = 2 ^ 10
-local TWO_POW_11 = 2 ^ 11
-local TWO_POW_12 = 2 ^ 12
-local TWO_POW_13 = 2 ^ 13
-local TWO_POW_14 = 2 ^ 14
-local TWO_POW_15 = 2 ^ 15
-local TWO_POW_16 = 2 ^ 16
-local TWO_POW_17 = 2 ^ 17
-local TWO_POW_18 = 2 ^ 18
-local TWO_POW_19 = 2 ^ 19
-local TWO_POW_20 = 2 ^ 20
-local TWO_POW_21 = 2 ^ 21
-local TWO_POW_22 = 2 ^ 22
-local TWO_POW_23 = 2 ^ 23
-local TWO_POW_24 = 2 ^ 24
-local TWO_POW_25 = 2 ^ 25
-local TWO_POW_26 = 2 ^ 26
-local TWO_POW_27 = 2 ^ 27
-local TWO_POW_28 = 2 ^ 28
-local TWO_POW_29 = 2 ^ 29
-local TWO_POW_30 = 2 ^ 30
-local TWO_POW_31 = 2 ^ 31
-local TWO_POW_32 = 2 ^ 32
-local TWO_POW_40 = 2 ^ 40
-local TWO56_POW_7 = 256 ^ 7
+const TWO_POW_NEG_56 = 2 ^ -56
+const TWO_POW_NEG_17 = 2 ^ -17
+const TWO_POW_2 = 2 ^ 2
+const TWO_POW_3 = 2 ^ 3
+const TWO_POW_4 = 2 ^ 4
+const TWO_POW_5 = 2 ^ 5
+const TWO_POW_6 = 2 ^ 6
+const TWO_POW_7 = 2 ^ 7
+const TWO_POW_8 = 2 ^ 8
+const TWO_POW_9 = 2 ^ 9
+const TWO_POW_10 = 2 ^ 10
+const TWO_POW_11 = 2 ^ 11
+const TWO_POW_12 = 2 ^ 12
+const TWO_POW_13 = 2 ^ 13
+const TWO_POW_14 = 2 ^ 14
+const TWO_POW_15 = 2 ^ 15
+const TWO_POW_16 = 2 ^ 16
+const TWO_POW_17 = 2 ^ 17
+const TWO_POW_18 = 2 ^ 18
+const TWO_POW_19 = 2 ^ 19
+const TWO_POW_20 = 2 ^ 20
+const TWO_POW_21 = 2 ^ 21
+const TWO_POW_22 = 2 ^ 22
+const TWO_POW_23 = 2 ^ 23
+const TWO_POW_24 = 2 ^ 24
+const TWO_POW_25 = 2 ^ 25
+const TWO_POW_26 = 2 ^ 26
+const TWO_POW_27 = 2 ^ 27
+const TWO_POW_28 = 2 ^ 28
+const TWO_POW_29 = 2 ^ 29
+const TWO_POW_30 = 2 ^ 30
+const TWO_POW_31 = 2 ^ 31
+const TWO_POW_32 = 2 ^ 32
+const TWO_POW_40 = 2 ^ 40
+const TWO56_POW_7 = 256 ^ 7
 
 --------------------------------------------------------------------------------
 -- SHA-256 FEED
 --------------------------------------------------------------------------------
 
-local function sha256_feed_64(H: { number }, str: string, offs: number, size: number)
-    local W, K = common_W, sha2_K_hi
+const function sha256_feed_64(H: { number }, str: string, offs: number, size: number)
+    const W, K = common_W, sha2_K_hi
     local h1, h2, h3, h4, h5, h6, h7, h8 = H[1], H[2], H[3], H[4], H[5], H[6], H[7], H[8]
     for pos = offs, offs + size - 1, 64 do
         for j = 1, 16 do
             pos += 4
-            local a, b, c, d = string.byte(str, pos - 3, pos)
+            const a, b, c, d = string.byte(str, pos - 3, pos)
             W[j] = ((a * 256 + b) * 256 + c) * 256 + d
         end
 
         for j = 17, 64 do
-            local a, b = W[j - 15], W[j - 2]
+            const a, b = W[j - 15], W[j - 2]
             W[j] = bit32_bxor(bit32_rrotate(a, 7), bit32_lrotate(a, 14), bit32_rshift(a, 3))
                 + bit32_bxor(bit32_lrotate(b, 15), bit32_lrotate(b, 13), bit32_rshift(b, 10))
                 + W[j - 7]
@@ -174,7 +174,7 @@ local function sha256_feed_64(H: { number }, str: string, offs: number, size: nu
 
         local a, b, c, d, e, f, g, h = h1, h2, h3, h4, h5, h6, h7, h8
         for j = 1, 64 do
-            local z = bit32_bxor(bit32_rrotate(e, 6), bit32_rrotate(e, 11), bit32_lrotate(e, 7))
+            const z = bit32_bxor(bit32_rrotate(e, 6), bit32_rrotate(e, 11), bit32_lrotate(e, 7))
                 + bit32_band(e, f)
                 + bit32_band(-1 - e, g)
                 + h
@@ -210,8 +210,8 @@ end
 -- SHA-512 FEED
 --------------------------------------------------------------------------------
 
-local function sha512_feed_128(H_lo: { number }, H_hi: { number }, str: string, offs: number, size: number)
-    local W, K_lo, K_hi = common_W, sha2_K_lo, sha2_K_hi
+const function sha512_feed_128(H_lo: { number }, H_hi: { number }, str: string, offs: number, size: number)
+    const W, K_lo, K_hi = common_W, sha2_K_lo, sha2_K_hi
     local h1_lo, h2_lo, h3_lo, h4_lo, h5_lo, h6_lo, h7_lo, h8_lo =
         H_lo[1], H_lo[2], H_lo[3], H_lo[4], H_lo[5], H_lo[6], H_lo[7], H_lo[8]
     local h1_hi, h2_hi, h3_hi, h4_hi, h5_hi, h6_hi, h7_hi, h8_hi =
@@ -219,13 +219,13 @@ local function sha512_feed_128(H_lo: { number }, H_hi: { number }, str: string, 
     for pos = offs, offs + size - 1, 128 do
         for j = 1, 16 * 2 do
             pos += 4
-            local a, b, c, d = string.byte(str, pos - 3, pos)
+            const a, b, c, d = string.byte(str, pos - 3, pos)
             W[j] = ((a * 256 + b) * 256 + c) * 256 + d
         end
 
         for jj = 34, 160, 2 do
-            local a_lo, a_hi, b_lo, b_hi = W[jj - 30], W[jj - 31], W[jj - 4], W[jj - 5]
-            local tmp1 = bit32_bxor(
+            const a_lo, a_hi, b_lo, b_hi = W[jj - 30], W[jj - 31], W[jj - 4], W[jj - 5]
+            const tmp1 = bit32_bxor(
                 bit32_rshift(a_lo, 1) + bit32_lshift(a_hi, 31),
                 bit32_rshift(a_lo, 8) + bit32_lshift(a_hi, 24),
                 bit32_rshift(a_lo, 7) + bit32_lshift(a_hi, 25)
@@ -235,7 +235,7 @@ local function sha512_feed_128(H_lo: { number }, H_hi: { number }, str: string, 
                 bit32_rshift(b_lo, 6) + bit32_lshift(b_hi, 26)
             ) % 4294967296 + W[jj - 14] + W[jj - 32]
 
-            local tmp2 = tmp1 % 4294967296
+            const tmp2 = tmp1 % 4294967296
             W[jj - 1] = bit32_bxor(
                 bit32_rshift(a_hi, 1) + bit32_lshift(a_lo, 31),
                 bit32_rshift(a_hi, 8) + bit32_lshift(a_lo, 24),
@@ -252,15 +252,15 @@ local function sha512_feed_128(H_lo: { number }, H_hi: { number }, str: string, 
         local a_lo, b_lo, c_lo, d_lo, e_lo, f_lo, g_lo, h_lo = h1_lo, h2_lo, h3_lo, h4_lo, h5_lo, h6_lo, h7_lo, h8_lo
         local a_hi, b_hi, c_hi, d_hi, e_hi, f_hi, g_hi, h_hi = h1_hi, h2_hi, h3_hi, h4_hi, h5_hi, h6_hi, h7_hi, h8_hi
         for j = 1, 80 do
-            local jj = 2 * j
+            const jj = 2 * j
             local tmp1 = bit32_bxor(
                 bit32_rshift(e_lo, 14) + bit32_lshift(e_hi, 18),
                 bit32_rshift(e_lo, 18) + bit32_lshift(e_hi, 14),
                 bit32_lshift(e_lo, 23) + bit32_rshift(e_hi, 9)
             ) % 4294967296 + (bit32_band(e_lo, f_lo) + bit32_band(-1 - e_lo, g_lo)) % 4294967296 + h_lo + K_lo[j] + W[jj]
 
-            local z_lo = tmp1 % 4294967296
-            local z_hi = bit32_bxor(
+            const z_lo = tmp1 % 4294967296
+            const z_hi = bit32_bxor(
                 bit32_rshift(e_hi, 14) + bit32_lshift(e_lo, 18),
                 bit32_rshift(e_hi, 18) + bit32_lshift(e_lo, 14),
                 bit32_lshift(e_hi, 23) + bit32_rshift(e_lo, 9)
@@ -336,20 +336,20 @@ end
 -- MD5 FEED
 --------------------------------------------------------------------------------
 
-local function md5_feed_64(H: { number }, str: string, offs: number, size: number)
-    local W, K, md5_next_shift = common_W, md5_K, md5_next_shift
+const function md5_feed_64(H: { number }, str: string, offs: number, size: number)
+    const W, K, md5_next_shift = common_W, md5_K, md5_next_shift
     local h1, h2, h3, h4 = H[1], H[2], H[3], H[4]
     for pos = offs, offs + size - 1, 64 do
         for j = 1, 16 do
             pos += 4
-            local a, b, c, d = string.byte(str, pos - 3, pos)
+            const a, b, c, d = string.byte(str, pos - 3, pos)
             W[j] = ((d * 256 + c) * 256 + b) * 256 + a
         end
 
         local a, b, c, d = h1, h2, h3, h4
         local s = 25
         for j = 1, 16 do
-            local F = bit32_rrotate(bit32_band(b, c) + bit32_band(-1 - b, d) + a + K[j] + W[j], s) + b
+            const F = bit32_rrotate(bit32_band(b, c) + bit32_band(-1 - b, d) + a + K[j] + W[j], s) + b
             s = md5_next_shift[s]
             a = d
             d = c
@@ -359,7 +359,7 @@ local function md5_feed_64(H: { number }, str: string, offs: number, size: numbe
 
         s = 27
         for j = 17, 32 do
-            local F = bit32_rrotate(bit32_band(d, b) + bit32_band(-1 - d, c) + a + K[j] + W[(5 * j - 4) % 16 + 1], s)
+            const F = bit32_rrotate(bit32_band(d, b) + bit32_band(-1 - d, c) + a + K[j] + W[(5 * j - 4) % 16 + 1], s)
                 + b
             s = md5_next_shift[s]
             a = d
@@ -370,7 +370,7 @@ local function md5_feed_64(H: { number }, str: string, offs: number, size: numbe
 
         s = 28
         for j = 33, 48 do
-            local F = bit32_rrotate(bit32_bxor(bit32_bxor(b, c), d) + a + K[j] + W[(3 * j + 2) % 16 + 1], s) + b
+            const F = bit32_rrotate(bit32_bxor(bit32_bxor(b, c), d) + a + K[j] + W[(3 * j + 2) % 16 + 1], s) + b
             s = md5_next_shift[s]
             a = d
             d = c
@@ -380,7 +380,7 @@ local function md5_feed_64(H: { number }, str: string, offs: number, size: numbe
 
         s = 26
         for j = 49, 64 do
-            local F = bit32_rrotate(bit32_bxor(c, bit32_bor(b, -1 - d)) + a + K[j] + W[(j * 7 - 7) % 16 + 1], s) + b
+            const F = bit32_rrotate(bit32_bxor(c, bit32_bor(b, -1 - d)) + a + K[j] + W[(j * 7 - 7) % 16 + 1], s) + b
             s = md5_next_shift[s]
             a = d
             d = c
@@ -401,13 +401,13 @@ end
 -- SHA-1 FEED
 --------------------------------------------------------------------------------
 
-local function sha1_feed_64(H: { number }, str: string, offs: number, size: number)
-    local W = common_W
+const function sha1_feed_64(H: { number }, str: string, offs: number, size: number)
+    const W = common_W
     local h1, h2, h3, h4, h5 = H[1], H[2], H[3], H[4], H[5]
     for pos = offs, offs + size - 1, 64 do
         for j = 1, 16 do
             pos += 4
-            local a, b, c, d = string.byte(str, pos - 3, pos)
+            const a, b, c, d = string.byte(str, pos - 3, pos)
             W[j] = ((a * 256 + b) * 256 + c) * 256 + d
         end
 
@@ -417,7 +417,7 @@ local function sha1_feed_64(H: { number }, str: string, offs: number, size: numb
 
         local a, b, c, d, e = h1, h2, h3, h4, h5
         for j = 1, 20 do
-            local z = bit32_lrotate(a, 5) + bit32_band(b, c) + bit32_band(-1 - b, d) + 0x5A827999 + W[j] + e
+            const z = bit32_lrotate(a, 5) + bit32_band(b, c) + bit32_band(-1 - b, d) + 0x5A827999 + W[j] + e
             e = d
             d = c
             c = bit32_rrotate(b, 2)
@@ -426,7 +426,7 @@ local function sha1_feed_64(H: { number }, str: string, offs: number, size: numb
         end
 
         for j = 21, 40 do
-            local z = bit32_lrotate(a, 5) + bit32_bxor(b, c, d) + 0x6ED9EBA1 + W[j] + e
+            const z = bit32_lrotate(a, 5) + bit32_bxor(b, c, d) + 0x6ED9EBA1 + W[j] + e
             e = d
             d = c
             c = bit32_rrotate(b, 2)
@@ -435,7 +435,7 @@ local function sha1_feed_64(H: { number }, str: string, offs: number, size: numb
         end
 
         for j = 41, 60 do
-            local z = bit32_lrotate(a, 5) + bit32_band(d, c) + bit32_band(b, bit32_bxor(d, c)) + 0x8F1BBCDC + W[j] + e
+            const z = bit32_lrotate(a, 5) + bit32_band(d, c) + bit32_band(b, bit32_bxor(d, c)) + 0x8F1BBCDC + W[j] + e
             e = d
             d = c
             c = bit32_rrotate(b, 2)
@@ -444,7 +444,7 @@ local function sha1_feed_64(H: { number }, str: string, offs: number, size: numb
         end
 
         for j = 61, 80 do
-            local z = bit32_lrotate(a, 5) + bit32_bxor(b, c, d) + 0xCA62C1D6 + W[j] + e
+            const z = bit32_lrotate(a, 5) + bit32_bxor(b, c, d) + 0xCA62C1D6 + W[j] + e
             e = d
             d = c
             c = bit32_rrotate(b, 2)
@@ -466,7 +466,7 @@ end
 -- KECCAK FEED
 --------------------------------------------------------------------------------
 
-local function keccak_feed(
+const function keccak_feed(
     lanes_lo: { number },
     lanes_hi: { number },
     str: string,
@@ -474,8 +474,8 @@ local function keccak_feed(
     size: number,
     block_size_in_bytes: number
 )
-    local RC_lo, RC_hi = sha3_RC_lo, sha3_RC_hi
-    local qwords_qty = block_size_in_bytes / 8
+    const RC_lo, RC_hi = sha3_RC_lo, sha3_RC_hi
+    const qwords_qty = block_size_in_bytes / 8
     for pos = offs, offs + size - 1, block_size_in_bytes do
         for j = 1, qwords_qty do
             local a, b, c, d = string.byte(str, pos + 1, pos + 4)
@@ -538,16 +538,16 @@ local function keccak_feed(
             lanes_hi[25]
 
         for round_idx = 1, 24 do
-            local C1_lo = bit32_bxor(L01_lo, L06_lo, L11_lo, L16_lo, L21_lo)
-            local C1_hi = bit32_bxor(L01_hi, L06_hi, L11_hi, L16_hi, L21_hi)
-            local C2_lo = bit32_bxor(L02_lo, L07_lo, L12_lo, L17_lo, L22_lo)
-            local C2_hi = bit32_bxor(L02_hi, L07_hi, L12_hi, L17_hi, L22_hi)
-            local C3_lo = bit32_bxor(L03_lo, L08_lo, L13_lo, L18_lo, L23_lo)
-            local C3_hi = bit32_bxor(L03_hi, L08_hi, L13_hi, L18_hi, L23_hi)
-            local C4_lo = bit32_bxor(L04_lo, L09_lo, L14_lo, L19_lo, L24_lo)
-            local C4_hi = bit32_bxor(L04_hi, L09_hi, L14_hi, L19_hi, L24_hi)
-            local C5_lo = bit32_bxor(L05_lo, L10_lo, L15_lo, L20_lo, L25_lo)
-            local C5_hi = bit32_bxor(L05_hi, L10_hi, L15_hi, L20_hi, L25_hi)
+            const C1_lo = bit32_bxor(L01_lo, L06_lo, L11_lo, L16_lo, L21_lo)
+            const C1_hi = bit32_bxor(L01_hi, L06_hi, L11_hi, L16_hi, L21_hi)
+            const C2_lo = bit32_bxor(L02_lo, L07_lo, L12_lo, L17_lo, L22_lo)
+            const C2_hi = bit32_bxor(L02_hi, L07_hi, L12_hi, L17_hi, L22_hi)
+            const C3_lo = bit32_bxor(L03_lo, L08_lo, L13_lo, L18_lo, L23_lo)
+            const C3_hi = bit32_bxor(L03_hi, L08_hi, L13_hi, L18_hi, L23_hi)
+            const C4_lo = bit32_bxor(L04_lo, L09_lo, L14_lo, L19_lo, L24_lo)
+            const C4_hi = bit32_bxor(L04_hi, L09_hi, L14_hi, L19_hi, L24_hi)
+            const C5_lo = bit32_bxor(L05_lo, L10_lo, L15_lo, L20_lo, L25_lo)
+            const C5_hi = bit32_bxor(L05_hi, L10_hi, L15_hi, L20_hi, L25_hi)
 
             local D_lo = bit32_bxor(C1_lo, C3_lo * 2 + (C3_hi % TWO_POW_32 - C3_hi % TWO_POW_31) / TWO_POW_31)
             local D_hi = bit32_bxor(C1_hi, C3_hi * 2 + (C3_lo % TWO_POW_32 - C3_lo % TWO_POW_31) / TWO_POW_31)
@@ -769,14 +769,14 @@ end
 --------------------------------------------------------------------------------
 
 do
-    local function mul(src1, src2, factor, result_length)
+    const function mul(src1, src2, factor, result_length)
         local result, carry, value, weight = table.create(result_length), 0, 0, 1
         for j = 1, result_length do
             for k = math.max(1, j + 1 - #src2), math.min(j, #src1) do
                 carry += factor * src1[k] * src2[j + 1 - k]
             end
 
-            local digit = carry % TWO_POW_24
+            const digit = carry % TWO_POW_24
             result[j] = math.floor(digit)
             carry = (carry - digit) / TWO_POW_24
             value += digit * weight
@@ -797,16 +797,16 @@ do
                 local R = root * TWO_POW_40
                 R = mul(table.create(1, math.floor(R)), one, 1, 2)
                 local _, delta = mul(R, mul(R, R, 1, 4), -1, 4)
-                local hi = R[2] % 65536 * 65536 + math.floor(R[1] / 256)
-                local lo = R[1] % 256 * 16777216 + math.floor(delta * (TWO_POW_NEG_56 / 3) * root / p)
+                const hi = R[2] % 65536 * 65536 + math.floor(R[1] / 256)
+                const lo = R[1] % 256 * 16777216 + math.floor(delta * (TWO_POW_NEG_56 / 3) * root / p)
 
                 if idx < 16 then
                     root = math.sqrt(p)
                     R = root * TWO_POW_40
                     R = mul(table.create(1, math.floor(R)), one, 1, 2)
                     _, delta = mul(R, R, -1, 2)
-                    local hi = R[2] % 65536 * 65536 + math.floor(R[1] / 256)
-                    local lo = R[1] % 256 * 16777216 + math.floor(delta * TWO_POW_NEG_17 / root)
+                    const hi = R[2] % 65536 * 65536 + math.floor(R[1] / 256)
+                    const lo = R[1] % 256 * 16777216 + math.floor(delta * TWO_POW_NEG_17 / root)
                     local idx = idx % 8 + 1
                     sha2_H_ext256[224][idx] = lo
                     sqrt_hi[idx], sqrt_lo[idx] = hi, lo + hi * hi_factor
@@ -846,7 +846,7 @@ end
 -- Constants for MD5
 do
     for idx = 1, 64 do
-        local hi, lo = math.modf(math.abs(math.sin(idx)) * TWO_POW_16)
+        const hi, lo = math.modf(math.abs(math.sin(idx)) * TWO_POW_16)
         md5_K[idx] = hi * 65536 + math.floor(lo * TWO_POW_16)
     end
 end
@@ -854,8 +854,8 @@ end
 -- Constants for SHA3
 do
     local sh_reg = 29
-    local function next_bit()
-        local r = sh_reg % 2
+    const function next_bit()
+        const r = sh_reg % 2
         sh_reg = bit32_bxor((sh_reg - r) / 2, 142 * r)
         return r
     end
@@ -867,7 +867,7 @@ do
             lo += next_bit() * m
         end
 
-        local hi = next_bit() * m
+        const hi = next_bit() * m
         sha3_RC_hi[idx], sha3_RC_lo[idx] = hi, lo + hi * hi_factor_keccak
     end
 end
@@ -876,28 +876,28 @@ end
 -- MAIN FUNCTIONS
 --------------------------------------------------------------------------------
 
-local function sha256ext(width: number, message: string?): string | (string?) -> string?
-    local Array256 = sha2_H_ext256[width]
+const function sha256ext(width: number, message: string?): string | (string?) -> string?
+    const Array256 = sha2_H_ext256[width]
     local length, tail = 0, ""
     local H = table.create(8)
     H[1], H[2], H[3], H[4], H[5], H[6], H[7], H[8] =
         Array256[1], Array256[2], Array256[3], Array256[4], Array256[5], Array256[6], Array256[7], Array256[8]
 
-    local function partial(message_part: string?): any
+    const function partial(message_part: string?): any
         if message_part then
-            local partLength = #message_part
+            const partLength = #message_part
             if tail then
                 length += partLength
                 local offs = 0
-                local tailLength = #tail
+                const tailLength = #tail
                 if tail ~= "" and tailLength + partLength >= 64 then
                     offs = 64 - tailLength
                     sha256_feed_64(H, tail .. string.sub(message_part, 1, offs), 0, 64)
                     tail = ""
                 end
 
-                local size = partLength - offs
-                local size_tail = size % 64
+                const size = partLength - offs
+                const size_tail = size % 64
                 sha256_feed_64(H, message_part, offs, size - size_tail)
                 tail = tail .. string.sub(message_part, partLength + 1 - size_tail)
                 return partial
@@ -920,7 +920,7 @@ local function sha256ext(width: number, message: string?): string | (string?) ->
 
                 final_blocks = table.concat(final_blocks)
                 sha256_feed_64(H, final_blocks, 0, #final_blocks)
-                local max_reg = width / 32
+                const max_reg = width / 32
                 for j = 1, max_reg do
                     H[j] = string.format("%08x", H[j] % 4294967296)
                 end
@@ -939,16 +939,16 @@ local function sha256ext(width: number, message: string?): string | (string?) ->
     end
 end
 
-local function sha512ext(width: number, message: string?): string | (string?) -> string?
+const function sha512ext(width: number, message: string?): string | (string?) -> string?
     local length, tail, H_lo, H_hi =
         0,
         "",
         table.pack(table.unpack(sha2_H_ext512_lo[width])),
         not HEX64 and table.pack(table.unpack(sha2_H_ext512_hi[width]))
 
-    local function partial(message_part: string?): any
+    const function partial(message_part: string?): any
         if message_part then
-            local partLength = #message_part
+            const partLength = #message_part
             if tail then
                 length += partLength
                 local offs = 0
@@ -958,8 +958,8 @@ local function sha512ext(width: number, message: string?): string | (string?) ->
                     tail = ""
                 end
 
-                local size = partLength - offs
-                local size_tail = size % 128
+                const size = partLength - offs
+                const size_tail = size % 128
                 sha512_feed_128(H_lo, H_hi, message_part, offs, size - size_tail)
                 tail = tail .. string.sub(message_part, partLength + 1 - size_tail)
                 return partial
@@ -982,7 +982,7 @@ local function sha512ext(width: number, message: string?): string | (string?) ->
 
                 final_blocks = table.concat(final_blocks)
                 sha512_feed_128(H_lo, H_hi, final_blocks, 0, #final_blocks)
-                local max_reg = math.ceil(width / 64)
+                const max_reg = math.ceil(width / 64)
 
                 if HEX64 then
                     for j = 1, max_reg do
@@ -1011,13 +1011,13 @@ local function sha512ext(width: number, message: string?): string | (string?) ->
     end
 end
 
-local function md5(message: string?): string | (string?) -> string?
+const function md5(message: string?): string | (string?) -> string?
     local H, length, tail = table.create(4), 0, ""
     H[1], H[2], H[3], H[4] = md5_sha1_H[1], md5_sha1_H[2], md5_sha1_H[3], md5_sha1_H[4]
 
-    local function partial(message_part: string?): any
+    const function partial(message_part: string?): any
         if message_part then
-            local partLength = #message_part
+            const partLength = #message_part
             if tail then
                 length += partLength
                 local offs = 0
@@ -1027,8 +1027,8 @@ local function md5(message: string?): string | (string?) -> string?
                     tail = ""
                 end
 
-                local size = partLength - offs
-                local size_tail = size % 64
+                const size = partLength - offs
+                const size_tail = size % 64
                 md5_feed_64(H, message_part, offs, size - size_tail)
                 tail = tail .. string.sub(message_part, partLength + 1 - size_tail)
                 return partial
@@ -1044,7 +1044,7 @@ local function md5(message: string?): string | (string?) -> string?
                 tail = nil
                 length *= 8
                 for j = 4, 11 do
-                    local low_byte = length % 256
+                    const low_byte = length % 256
                     final_blocks[j] = string.char(low_byte)
                     length = (length - low_byte) / 256
                 end
@@ -1069,12 +1069,12 @@ local function md5(message: string?): string | (string?) -> string?
     end
 end
 
-local function sha1(message: string?): string | (string?) -> string?
+const function sha1(message: string?): string | (string?) -> string?
     local H, length, tail = table.pack(table.unpack(md5_sha1_H)), 0, ""
 
-    local function partial(message_part: string?): any
+    const function partial(message_part: string?): any
         if message_part then
-            local partLength = #message_part
+            const partLength = #message_part
             if tail then
                 length += partLength
                 local offs = 0
@@ -1084,8 +1084,8 @@ local function sha1(message: string?): string | (string?) -> string?
                     tail = ""
                 end
 
-                local size = partLength - offs
-                local size_tail = size % 64
+                const size = partLength - offs
+                const size_tail = size % 64
                 sha1_feed_64(H, message_part, offs, size - size_tail)
                 tail = tail .. string.sub(message_part, partLength + 1 - size_tail)
                 return partial
@@ -1126,7 +1126,7 @@ local function sha1(message: string?): string | (string?) -> string?
     end
 end
 
-local function keccak(
+const function keccak(
     block_size_in_bytes: number,
     digest_size_in_bytes: number,
     is_SHAKE: boolean,
@@ -1139,9 +1139,9 @@ local function keccak(
     local tail, lanes_lo, lanes_hi = "", table.create(25, 0), hi_factor_keccak == 0 and table.create(25, 0)
     local result
 
-    local function partial(message_part: string?): any
+    const function partial(message_part: string?): any
         if message_part then
-            local partLength = #message_part
+            const partLength = #message_part
             if tail then
                 local offs = 0
                 if tail ~= "" and #tail + partLength >= block_size_in_bytes then
@@ -1157,8 +1157,8 @@ local function keccak(
                     tail = ""
                 end
 
-                local size = partLength - offs
-                local size_tail = size % block_size_in_bytes
+                const size = partLength - offs
+                const size_tail = size % block_size_in_bytes
                 keccak_feed(lanes_lo, lanes_hi, message_part, offs, size - size_tail, block_size_in_bytes)
                 tail = tail .. string.sub(message_part, partLength + 1 - size_tail)
                 return partial
@@ -1167,7 +1167,7 @@ local function keccak(
             end
         else
             if tail then
-                local gap_start = if is_SHAKE then 31 else 6
+                const gap_start = if is_SHAKE then 31 else 6
                 tail = tail
                     .. (
                         if #tail + 1 == block_size_in_bytes
@@ -1180,10 +1180,10 @@ local function keccak(
                 tail = nil
 
                 local lanes_used = 0
-                local total_lanes = math.floor(block_size_in_bytes / 8)
-                local qwords = {}
+                const total_lanes = math.floor(block_size_in_bytes / 8)
+                const qwords = {}
 
-                local function get_next_qwords_of_digest(qwords_qty)
+                const function get_next_qwords_of_digest(qwords_qty)
                     if lanes_used >= total_lanes then
                         keccak_feed(lanes_lo, lanes_hi, "\0\0\0\0\0\0\0\0", 0, 8, 8)
                         lanes_used = 0
@@ -1210,15 +1210,15 @@ local function keccak(
                         qwords_qty * 8
                 end
 
-                local parts = {}
+                const parts = {}
                 local last_part, last_part_size = "", 0
 
-                local function get_next_part_of_digest(bytes_needed)
+                const function get_next_part_of_digest(bytes_needed)
                     bytes_needed = bytes_needed or 1
                     if bytes_needed <= last_part_size then
                         last_part_size -= bytes_needed
-                        local part_size_in_nibbles = bytes_needed * 2
-                        local result = string.sub(last_part, 1, part_size_in_nibbles)
+                        const part_size_in_nibbles = bytes_needed * 2
+                        const result = string.sub(last_part, 1, part_size_in_nibbles)
                         last_part = string.sub(last_part, part_size_in_nibbles + 1)
                         return result
                     end
@@ -1231,7 +1231,7 @@ local function keccak(
                     end
 
                     while bytes_needed >= 8 do
-                        local next_part, next_part_size = get_next_qwords_of_digest(bytes_needed / 8)
+                        const next_part, next_part_size = get_next_qwords_of_digest(bytes_needed / 8)
                         parts_qty += 1
                         parts[parts_qty] = next_part
                         bytes_needed -= next_part_size
@@ -1270,16 +1270,16 @@ end
 -- UTILITY FUNCTIONS
 --------------------------------------------------------------------------------
 
-local function hexToBinFunction(hh: string): string
+const function hexToBinFunction(hh: string): string
     return string.char(tonumber(hh, 16) :: number)
 end
 
-local function hex2bin(hex_string: string): string
+const function hex2bin(hex_string: string): string
     assert(type(hex_string) == "string", "argument #1 must be a string")
     return (string.gsub(hex_string, "%x%x", hexToBinFunction))
 end
 
-local base64_symbols: { [string | number]: string | number } = {
+const base64_symbols: { [string | number]: string | number } = {
     ["+"] = 62,
     ["-"] = 62,
     [62] = "+",
@@ -1294,20 +1294,20 @@ local base64_symbols: { [string | number]: string | number } = {
 local symbol_index = 0
 for _, pair in ipairs({ "AZ", "az", "09" }) do
     for ascii = string.byte(pair), string.byte(pair, 2) do
-        local ch = string.char(ascii)
+        const ch = string.char(ascii)
         base64_symbols[ch] = symbol_index
         base64_symbols[symbol_index] = ch
         symbol_index += 1
     end
 end
 
-local function bin2base64(binary_string: string): string
+const function bin2base64(binary_string: string): string
     assert(type(binary_string) == "string", "argument #1 must be a string")
-    local result = table.create(math.ceil(#binary_string / 3))
+    const result = table.create(math.ceil(#binary_string / 3))
     local length = 0
 
     for pos = 1, #binary_string, 3 do
-        local c1, c2, c3, c4 = string.byte(string.sub(binary_string, pos, pos + 2) .. "\0", 1, -1)
+        const c1, c2, c3, c4 = string.byte(string.sub(binary_string, pos, pos + 2) .. "\0", 1, -1)
         length += 1
         result[length] = base64_symbols[math.floor(c1 / 4)]
             .. base64_symbols[c1 % 4 * 16 + math.floor(c2 / 16)]
@@ -1318,7 +1318,7 @@ local function bin2base64(binary_string: string): string
     return table.concat(result)
 end
 
-local function base642bin(base64_string: string): string
+const function base642bin(base64_string: string): string
     assert(type(base64_string) == "string", "argument #1 must be a string")
     local result, chars_qty = {}, 3
     for pos, ch in string.gmatch(string.gsub(base64_string, "%s+", ""), "()(.)") do
@@ -1328,13 +1328,13 @@ local function base642bin(base64_string: string): string
             code = 0
         end
 
-        local idx = pos % 4
+        const idx = pos % 4
         if idx > 0 then
             result[-idx] = code
         else
-            local c1 = result[-1] * 4 + math.floor(result[-2] / 16)
-            local c2 = (result[-2] % 16) * 16 + math.floor(result[-3] / 4)
-            local c3 = (result[-3] % 4) * 64 + code
+            const c1 = result[-1] * 4 + math.floor(result[-2] / 16)
+            const c2 = (result[-2] % 16) * 16 + math.floor(result[-3] / 4)
+            const c3 = (result[-3] % 4) * 64 + code
             result[#result + 1] = string.sub(string.char(c1, c2, c3), 1, chars_qty)
         end
     end
@@ -1348,13 +1348,13 @@ end
 
 local block_size_for_HMAC: { [any]: number }
 
-local BinaryStringMap: { [string]: string } = {}
+const BinaryStringMap: { [string]: string } = {}
 for index = 0, 255 do
     BinaryStringMap[string.format("%02x", index)] = string.char(index)
 end
 
-local function hmac(hash_func: any, key: string, message: string?, asBinary: boolean?): any
-    local block_size = block_size_for_HMAC[hash_func]
+const function hmac(hash_func: any, key: string, message: string?, asBinary: boolean?): any
+    const block_size = block_size_for_HMAC[hash_func]
     if not block_size then
         error("Unknown hash function", 2)
     end
@@ -1365,13 +1365,13 @@ local function hmac(hash_func: any, key: string, message: string?, asBinary: boo
         keyLength = #key
     end
 
-    local append = hash_func()(string.gsub(key, ".", function(c)
+    const append = hash_func()(string.gsub(key, ".", function(c)
         return string.char(bit32_bxor(string.byte(c), 0x36))
     end) .. string.rep("6", block_size - keyLength))
 
     local result
 
-    local function partial(message_part: string?): any
+    const function partial(message_part: string?): any
         if not message_part then
             result = result
                 or hash_func(
@@ -1392,7 +1392,7 @@ local function hmac(hash_func: any, key: string, message: string?, asBinary: boo
     end
 
     if message then
-        local finalMessage = partial(message)()
+        const finalMessage = partial(message)()
         return if asBinary then (string.gsub(finalMessage, "%x%x", BinaryStringMap)) else finalMessage
     else
         return partial
@@ -1403,7 +1403,7 @@ end
 -- MODULE
 --------------------------------------------------------------------------------
 
-local HashLib = {
+const HashLib = {
     md5 = md5,
     sha1 = sha1,
     sha224 = function(message: string?): any
