@@ -110,7 +110,6 @@ const md5_next_shift = {
     23,
     21,
 }
-local HEX64, XOR64A5, lanes_index_base
 const common_W = {}
 const K_lo_modulo, hi_factor, hi_factor_keccak = 4294967296, 0, 0
 
@@ -805,12 +804,12 @@ do
                     R = root * TWO_POW_40
                     R = mul(table.create(1, math.floor(R)), one, 1, 2)
                     _, delta = mul(R, R, -1, 2)
-                    const hi = R[2] % 65536 * 65536 + math.floor(R[1] / 256)
-                    const lo = R[1] % 256 * 16777216 + math.floor(delta * TWO_POW_NEG_17 / root)
-                    local idx = idx % 8 + 1
-                    sha2_H_ext256[224][idx] = lo
-                    sqrt_hi[idx], sqrt_lo[idx] = hi, lo + hi * hi_factor
-                    if idx > 7 then
+                    const sqrtHi = R[2] % 65536 * 65536 + math.floor(R[1] / 256)
+                    const sqrtLo = R[1] % 256 * 16777216 + math.floor(delta * TWO_POW_NEG_17 / root)
+                    const sqrtIndex = idx % 8 + 1
+                    sha2_H_ext256[224][sqrtIndex] = sqrtLo
+                    sqrt_hi[sqrtIndex], sqrt_lo[sqrtIndex] = sqrtHi, sqrtLo + sqrtHi * hi_factor
+                    if sqrtIndex > 7 then
                         sqrt_hi, sqrt_lo = sha2_H_ext512_hi[384], sha2_H_ext512_lo[384]
                     end
                 end
@@ -825,17 +824,10 @@ end
 
 -- Calculating IVs for SHA512/224 and SHA512/256
 for width = 224, 256, 32 do
-    local H_lo, H_hi = {}, nil
-    if XOR64A5 then
-        for j = 1, 8 do
-            H_lo[j] = XOR64A5(sha2_H_lo[j])
-        end
-    else
-        H_hi = {}
-        for j = 1, 8 do
-            H_lo[j] = bit32_bxor(sha2_H_lo[j], 0xA5A5A5A5) % 4294967296
-            H_hi[j] = bit32_bxor(sha2_H_hi[j], 0xA5A5A5A5) % 4294967296
-        end
+    const H_lo, H_hi = {}, {}
+    for j = 1, 8 do
+        H_lo[j] = bit32_bxor(sha2_H_lo[j], 0xA5A5A5A5) % 4294967296
+        H_hi[j] = bit32_bxor(sha2_H_hi[j], 0xA5A5A5A5) % 4294967296
     end
 
     sha512_feed_128(H_lo, H_hi, `SHA-512/{width}\128{string.rep("\0", 115)}\88`, 0, 128)
@@ -941,10 +933,7 @@ end
 
 const function sha512ext(width: number, message: string?): string | (string?) -> string?
     local length, tail, H_lo, H_hi =
-        0,
-        "",
-        table.pack(table.unpack(sha2_H_ext512_lo[width])),
-        not HEX64 and table.pack(table.unpack(sha2_H_ext512_hi[width]))
+        0, "", table.pack(table.unpack(sha2_H_ext512_lo[width])), table.pack(table.unpack(sha2_H_ext512_hi[width]))
 
     const function partial(message_part: string?): any
         if message_part then
@@ -984,18 +973,11 @@ const function sha512ext(width: number, message: string?): string | (string?) ->
                 sha512_feed_128(H_lo, H_hi, final_blocks, 0, #final_blocks)
                 const max_reg = math.ceil(width / 64)
 
-                if HEX64 then
-                    for j = 1, max_reg do
-                        H_lo[j] = HEX64(H_lo[j])
-                    end
-                else
-                    for j = 1, max_reg do
-                        H_lo[j] = string.format("%08x", H_hi[j] % 4294967296)
-                            .. string.format("%08x", H_lo[j] % 4294967296)
-                    end
-
-                    H_hi = nil
+                for j = 1, max_reg do
+                    H_lo[j] = string.format("%08x", H_hi[j] % 4294967296) .. string.format("%08x", H_lo[j] % 4294967296)
                 end
+
+                H_hi = nil
 
                 H_lo = string.sub(table.concat(H_lo, "", 1, max_reg), 1, width / 4)
             end
@@ -1190,15 +1172,9 @@ const function keccak(
                     end
 
                     qwords_qty = math.floor(math.min(qwords_qty, total_lanes - lanes_used))
-                    if hi_factor_keccak ~= 0 then
-                        for j = 1, qwords_qty do
-                            qwords[j] = HEX64(lanes_lo[lanes_used + j - 1 + lanes_index_base])
-                        end
-                    else
-                        for j = 1, qwords_qty do
-                            qwords[j] = string.format("%08x", lanes_hi[lanes_used + j] % 4294967296)
-                                .. string.format("%08x", lanes_lo[lanes_used + j] % 4294967296)
-                        end
+                    for j = 1, qwords_qty do
+                        qwords[j] = string.format("%08x", lanes_hi[lanes_used + j] % 4294967296)
+                            .. string.format("%08x", lanes_lo[lanes_used + j] % 4294967296)
                     end
 
                     lanes_used += qwords_qty
