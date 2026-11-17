@@ -8,6 +8,8 @@ documents.
 --]]
 
 const HashLib = require("@hashlib")
+const Testable = require("@devpackages/Testable")
+const describe, expect, it = Testable.describe, Testable.expect, Testable.it
 
 return function()
     describe("md5", function()
