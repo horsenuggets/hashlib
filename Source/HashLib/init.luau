@@ -41,7 +41,7 @@ export type HashLib = {
     base64ToBin: (base64: string) -> string,
     binToBase64: (binary: string) -> string,
     base64Encode: (input: string) -> string,
-    base64Decode: (input: string) -> string,
+    base64Decode: (input: string) -> string
 }
 
 --------------------------------------------------------------------------------
@@ -69,15 +69,15 @@ const bit32_rshift = bit32.rshift
 const sha2_K_lo, sha2_K_hi, sha2_H_lo, sha2_H_hi, sha3_RC_lo, sha3_RC_hi = {}, {}, {}, {}, {}, {}
 const sha2_H_ext256 = {
     [224] = {},
-    [256] = sha2_H_hi,
+    [256] = sha2_H_hi
 }
 const sha2_H_ext512_lo, sha2_H_ext512_hi =
     {
         [384] = {},
-        [512] = sha2_H_lo,
+        [512] = sha2_H_lo
     }, {
         [384] = {},
-        [512] = sha2_H_hi,
+        [512] = sha2_H_hi
     }
 const md5_K, md5_sha1_H = {}, { 0x67452301, 0xEFCDAB89, 0x98BADCFE, 0x10325476, 0xC3D2E1F0 }
 const md5_next_shift = {
@@ -108,7 +108,7 @@ const md5_next_shift = {
     20,
     22,
     23,
-    21,
+    21
 }
 const common_W = {}
 const K_lo_modulo, hi_factor, hi_factor_keccak = 4294967296, 0, 0
@@ -1264,7 +1264,7 @@ const base64_symbols: { [string | number]: string | number } = {
     [63] = "/",
     ["="] = -1,
     ["."] = -1,
-    [-1] = "=",
+    [-1] = "="
 }
 
 local symbol_index = 0
@@ -1423,7 +1423,7 @@ const HashLib = {
     base64ToBin = base642bin,
     binToBase64 = bin2base64,
     base64Encode = Base64.encode,
-    base64Decode = Base64.decode,
+    base64Decode = Base64.decode
 }
 
 block_size_for_HMAC = {
@@ -1438,7 +1438,7 @@ block_size_for_HMAC = {
     [HashLib.sha3x224] = (1600 - 2 * 224) / 8,
     [HashLib.sha3x256] = (1600 - 2 * 256) / 8,
     [HashLib.sha3x384] = (1600 - 2 * 384) / 8,
-    [HashLib.sha3x512] = (1600 - 2 * 512) / 8,
+    [HashLib.sha3x512] = (1600 - 2 * 512) / 8
 }
 
 return HashLib :: HashLib

@@ -24,7 +24,7 @@ function RunTests.exec()
     Testable.configure({
         Coverage = true,
         CoverageThreshold = 0,
-        CoverageRoots = project.Source,
+        CoverageRoots = project.Source
     })
     RunTests.test()
 end
